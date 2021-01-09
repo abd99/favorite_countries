@@ -49,7 +49,9 @@ class _CountriesPageState extends State<CountriesPage> {
         builder: (context, state) {
           if (state is CountryInitial) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+              ),
             );
           }
           if (state is CountryFailure) {
@@ -83,7 +85,9 @@ class _CountriesPageState extends State<CountriesPage> {
             );
           }
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              strokeWidth: 1.5,
+            ),
           );
         },
       ),
