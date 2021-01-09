@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import '../../country/models/country.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:favorite_countries/models/country.dart';
 import 'package:http/http.dart' as http;
 
 part 'country_event.dart';
@@ -37,8 +38,15 @@ class CountryBloc extends Bloc<CountryEvent, CountryState> {
                   hasReachedMax: false,
                 );
         }
+      } on SocketException catch (e) {
+        print('Socket exception: ${e.message}');
+
+        if (e.message == "Failed host lookup: 'api.first.org'") {
+          yield CountryFailure(errorMessage: 'Please check your network connectivity.');
+        } else
+          yield CountryFailure();
       } catch (e) {
-        print(e.toString());
+        print('CountryFailure: ${e.toString()}');
         yield CountryFailure();
       }
     }

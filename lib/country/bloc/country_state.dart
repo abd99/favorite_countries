@@ -9,7 +9,11 @@ abstract class CountryState extends Equatable {
 
 class CountryInitial extends CountryState {}
 
-class CountryFailure extends CountryState {}
+class CountryFailure extends CountryState {
+  final String errorMessage;
+
+  CountryFailure({this.errorMessage});
+}
 
 class CountrySuccess extends CountryState {
   final List<Country> countries;
