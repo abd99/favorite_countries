@@ -48,16 +48,18 @@ class _FavoritesList extends StatelessWidget {
               horizontal: 8.0,
             ),
             itemCount: state.favorites.favoriteCountries.length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(
-                state.favorites.favoriteCountries[index].countryName,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+            itemBuilder: (context, index) {
+              var country = state.favorites.favoriteCountries[index];
+              return ListTile(
+                title: Text(
+                  '${country.code} - ${country.countryName}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              subtitle:
-                  Text('${state.favorites.favoriteCountries[index].region}'),
-            ),
+                subtitle: Text('${country.region}'),
+              );
+            },
           );
         }
         return const Text('Something went wrong!');

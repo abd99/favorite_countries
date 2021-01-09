@@ -131,7 +131,7 @@ class CountryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        country.countryName,
+        '${country.code} - ${country.countryName}',
         style: TextStyle(
           fontWeight: FontWeight.w600,
         ),

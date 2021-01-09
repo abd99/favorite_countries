@@ -42,7 +42,8 @@ class CountryBloc extends Bloc<CountryEvent, CountryState> {
         print('Socket exception: ${e.message}');
 
         if (e.message == "Failed host lookup: 'api.first.org'") {
-          yield CountryFailure(errorMessage: 'Please check your network connectivity.');
+          yield CountryFailure(
+              errorMessage: 'Please check your network connectivity.');
         } else
           yield CountryFailure();
       } catch (e) {
@@ -66,6 +67,7 @@ class CountryBloc extends Bloc<CountryEvent, CountryState> {
         Map<String, dynamic> data = responseData['data'];
         return data.entries
             .map((entry) => Country(
+                  code: entry.key,
                   countryName: entry.value['country'],
                   region: entry.value['region'],
                 ))
