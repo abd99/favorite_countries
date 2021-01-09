@@ -5,6 +5,8 @@ A simple Flutter project that fetches a list of countries from the [Countries AP
 ## Screen Capture
 <img src="favorite_countries.gif" width="250">
 
+Checkout the [APK](app-release.apk).
+
 ### Dependencies:
 
 | Packages                                                   |
