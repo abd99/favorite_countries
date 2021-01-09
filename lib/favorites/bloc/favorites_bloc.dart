@@ -18,7 +18,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     if (event is FavoritesStarted) {
       yield* _mapFavoritesStartedToState();
     } else if (event is FavoritesItemAdded) {
-      yield* _mapFavoriteItemAddedToState(event, state);
+      yield* _mapFavoritesItemAddedToState(event, state);
+    } else if (event is FavoritesItemRemoved) {
+      yield* _mapFavoritesItemRemovedFromState(event, state);
     }
   }
 
@@ -32,7 +34,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     }
   }
 
-  Stream<FavoritesState> _mapFavoriteItemAddedToState(
+  Stream<FavoritesState> _mapFavoritesItemAddedToState(
     FavoritesItemAdded event,
     FavoritesState state,
   ) async* {
@@ -42,6 +44,23 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
           favorites: Favorites(
               favoriteCountries: List.from(state.favorites.favoriteCountries)
                 ..add(event.country)),
+        );
+      } on Exception {
+        yield FavoritesError();
+      }
+    }
+  }
+
+  Stream<FavoritesState> _mapFavoritesItemRemovedFromState(
+    FavoritesItemRemoved event,
+    FavoritesState state,
+  ) async* {
+    if (state is FavoritesLoaded) {
+      try {
+        yield FavoritesLoaded(
+          favorites: Favorites(
+              favoriteCountries: List.from(state.favorites.favoriteCountries)
+                ..remove(event.country)),
         );
       } on Exception {
         yield FavoritesError();

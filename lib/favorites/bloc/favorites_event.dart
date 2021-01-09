@@ -20,3 +20,12 @@ class FavoritesItemAdded extends FavoritesEvent {
   @override
   List<Object> get props => [country];
 }
+
+class FavoritesItemRemoved extends FavoritesEvent {
+  const FavoritesItemRemoved(this.country);
+
+  final Country country;
+
+  @override
+  List<Object> get props => [country];
+}

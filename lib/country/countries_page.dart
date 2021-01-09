@@ -168,11 +168,15 @@ class FavoritesIconButton extends StatelessWidget {
             child: Icon(
               containsCountry ? Icons.favorite : Icons.favorite_border,
             ),
-            onTap: !containsCountry
-                ? () => context
-                    .read<FavoritesBloc>()
-                    .add(FavoritesItemAdded(country))
-                : null,
+            onTap: () {
+              !containsCountry
+                  ? context
+                      .read<FavoritesBloc>()
+                      .add(FavoritesItemAdded(country))
+                  : context
+                      .read<FavoritesBloc>()
+                      .add(FavoritesItemRemoved(country));
+            },
           );
         }
       },
