@@ -12,4 +12,12 @@ class Country extends Equatable {
 
   @override
   String toString() => 'Country { name: $countryName }';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'code': code,
+      'name': countryName,
+      'region': region,
+    };
+  }
 }

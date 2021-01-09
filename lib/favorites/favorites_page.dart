@@ -37,8 +37,10 @@ class _FavoritesList extends StatelessWidget {
     return BlocBuilder<FavoritesBloc, FavoritesState>(
       builder: (context, state) {
         if (state is FavoritesLoading) {
-          return const CircularProgressIndicator(
-            strokeWidth: 1.5,
+          return Center(
+            child: const CircularProgressIndicator(
+              strokeWidth: 1.5,
+            ),
           );
         }
         if (state is FavoritesLoaded) {

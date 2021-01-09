@@ -37,7 +37,7 @@ class _CountriesPageState extends State<CountriesPage> {
         brightness: Brightness.light,
         elevation: 0.2,
         actions: [
-          FlatButton(
+          TextButton(
             child: const Text(
               'Favorites',
             ),
@@ -49,9 +49,7 @@ class _CountriesPageState extends State<CountriesPage> {
         builder: (context, state) {
           if (state is CountryInitial) {
             return Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 1.5,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           if (state is CountryFailure) {
@@ -84,6 +82,9 @@ class _CountriesPageState extends State<CountriesPage> {
               controller: _scrollController,
             );
           }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -179,6 +180,10 @@ class FavoritesIconButton extends StatelessWidget {
             },
           );
         }
+        print('State: $state');
+        return CircularProgressIndicator(
+          strokeWidth: 1.5,
+        );
       },
     );
   }

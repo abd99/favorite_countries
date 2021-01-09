@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 import 'package:favorite_countries/country/models/country.dart';
 import 'package:favorite_countries/favorites/models/favorites.dart';
+import 'package:favorite_countries/favorites/services/favorites_database_handler.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';
@@ -27,9 +29,15 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   Stream<FavoritesState> _mapFavoritesStartedToState() async* {
     yield FavoritesLoading();
     try {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      yield const FavoritesLoaded();
-    } catch (_) {
+      var favoritesTable = FavoritesDatabaseHandler();
+      await favoritesTable.open(path: 'favorites.db');
+      var favoritesList = await favoritesTable.getStoredFavorites();
+      yield FavoritesLoaded(
+        favorites: Favorites(
+          favoriteCountries: favoritesList,
+        ),
+      );
+    } catch (e) {
       yield FavoritesError();
     }
   }
@@ -40,12 +48,15 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   ) async* {
     if (state is FavoritesLoaded) {
       try {
+        var favoritesTable = FavoritesDatabaseHandler();
+        await favoritesTable.open(path: 'favorites.db');
+        favoritesTable.insertCountry(event.country);
+        var favorites = await favoritesTable.getStoredFavorites();
         yield FavoritesLoaded(
-          favorites: Favorites(
-              favoriteCountries: List.from(state.favorites.favoriteCountries)
-                ..add(event.country)),
+          favorites: Favorites(favoriteCountries: favorites),
         );
-      } on Exception {
+      } on Exception catch (e) {
+        print('FavoritesException: $e');
         yield FavoritesError();
       }
     }
@@ -57,10 +68,12 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   ) async* {
     if (state is FavoritesLoaded) {
       try {
+        var favoritesTable = FavoritesDatabaseHandler();
+        await favoritesTable.open(path: 'favorites.db');
+        favoritesTable.removeCountry(event.country);
+        var favorites = await favoritesTable.getStoredFavorites();
         yield FavoritesLoaded(
-          favorites: Favorites(
-              favoriteCountries: List.from(state.favorites.favoriteCountries)
-                ..remove(event.country)),
+          favorites: Favorites(favoriteCountries: favorites),
         );
       } on Exception {
         yield FavoritesError();
